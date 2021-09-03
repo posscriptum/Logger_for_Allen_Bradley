@@ -135,7 +135,7 @@ namespace WindowsFormsApp1
             //write values to file
             object[] blocks = {DateTime.Now.ToLongTimeString(), tag1.ToString(), tag2.ToString(), tag3.ToString(), tag4.ToString(), tag5.ToString() };
             tableCSV.Rows.Add(blocks);
-            ExportToCSV(path + Regex.Replace(DateTime.Now.ToShortDateString(), @"\D", ".") + "-" + textBoxTag.Text + ".csv", tableCSV);
+            ExportToCSV(path + Regex.Replace(DateTime.Now.ToString("dd.MM.yyyy"), @"\D", ".") + "-" + textBoxTag.Text + ".csv", tableCSV);
 
         }
 
@@ -175,10 +175,10 @@ namespace WindowsFormsApp1
 
             
 
-            var date = DateTime.Now.ToString();
+            var date = DateTime.Now.ToString("dd.MM.yyyy");
             date = Regex.Replace(date, @"\D", ".");
            
-            tableCSV = ImportFromCSV(path + date + textBoxTag.Text + ".csv", true);
+            tableCSV = ImportFromCSV(path + date + "-" + textBoxTag.Text + ".csv", true);
 
             if(tableCSV.Rows.Count == 0)
             {
@@ -275,9 +275,9 @@ namespace WindowsFormsApp1
                 tr = new StreamReader(fileName, Encoding.GetEncoding(1251));
                 exuptionExecuted2 = "Start attach data to an existing file";
             }
-            catch
+            catch(Exception ex)
             {
-                exuptionExecuted2 = "";
+                exuptionExecuted2 = ex.Message.ToString();
                 return new DataTable();
             }
 

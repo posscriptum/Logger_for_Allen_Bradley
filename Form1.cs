@@ -24,11 +24,11 @@ namespace WindowsFormsApp1
         Tag<RealPlcMapper, float> ply5TagSpeed;
         Tag<RealPlcMapper, float> ply6TagSpeed;
 
-        float tag1;
-        float tag2;
-        float tag3;
-        float tag4;
-        float tag5;
+        string tag1;
+        string tag2;
+        string tag3;
+        string tag4;
+        string tag5;
 
         private static char separator = ';';
 
@@ -40,7 +40,7 @@ namespace WindowsFormsApp1
         private static string exuptionExecuted1;
         private static string exuptionExecuted2;
         private static string exuptionExecuted3;
-        private static string exuptionExecuted4;
+        private static string exeptionExecuted4;
         private static string exuptionExecuted5;
 
         public Form1()
@@ -56,7 +56,7 @@ namespace WindowsFormsApp1
         private void Logging(object sender, EventArgs e)
         {
             // show errors on form
-            label8.Text = exuptionExecuted1 + "\n" + exuptionExecuted2 + "\n" + exuptionExecuted3 + "\n" + exuptionExecuted4 + "\n" + exuptionExecuted5;
+            label8.Text = exuptionExecuted1 + "\n" + exuptionExecuted2 + "\n" + exuptionExecuted3 + "\n" + exeptionExecuted4 + "\n" + exuptionExecuted5;
 
 
             // create new file
@@ -92,8 +92,8 @@ namespace WindowsFormsApp1
 
             if (exuptionExecuted1 != "" & exuptionExecuted1 != null & innerCountAttempt >= 1)
             {
-                timerLog.Enabled = false;
-                button3.Text = "Start";
+                //timerLog.Enabled = false;
+                //button3.Text = "Start";
                 innerCountAttempt = 0;
             }
             else
@@ -126,14 +126,14 @@ namespace WindowsFormsApp1
 
 
             //Save old values of tags
-            tag1 = ply2TagSpeed.Value;
-            tag2 = ply3TagSpeed.Value;
-            tag3 = ply4TagSpeed.Value;
-            tag4 = ply5TagSpeed.Value;
-            tag5 = ply6TagSpeed.Value;
+            tag1 = Regex.Replace(ply2TagSpeed.Value.ToString(), @"\.", ",");
+            tag2 = Regex.Replace(ply3TagSpeed.Value.ToString(), @"\.", ",");
+            tag3 = Regex.Replace(ply4TagSpeed.Value.ToString(), @"\.", ",");
+            tag4 = Regex.Replace(ply5TagSpeed.Value.ToString(), @"\.", ",");
+            tag5 = Regex.Replace(ply6TagSpeed.Value.ToString(), @"\.", ",");
 
             //write values to file
-            object[] blocks = {DateTime.Now.ToLongTimeString(), tag1.ToString(), tag2.ToString(), tag3.ToString(), tag4.ToString(), tag5.ToString() };
+            object[] blocks = {DateTime.Now.ToLongTimeString(), tag1, tag2, tag3, tag4, tag5};
             tableCSV.Rows.Add(blocks);
             ExportToCSV(path + Regex.Replace(DateTime.Now.ToString("dd.MM.yyyy"), @"\D", ".") + "-" + textBoxTag.Text + ".csv", tableCSV);
 
@@ -275,9 +275,9 @@ namespace WindowsFormsApp1
                 tr = new StreamReader(fileName, Encoding.GetEncoding(1251));
                 exuptionExecuted2 = "Start attach data to an existing file";
             }
-            catch(Exception ex)
+            catch
             {
-                exuptionExecuted2 = ex.Message.ToString();
+                exuptionExecuted2 = "";
                 return new DataTable();
             }
 
@@ -305,6 +305,7 @@ namespace WindowsFormsApp1
                     try
                     {
                         t = Regex.Replace(blocks[i].ToString(), "\"", "");
+                        t = Regex.Replace(t, @"\.", ",");
                         exuptionExecuted3 = "";
                     }
                     catch(Exception ex)
@@ -341,11 +342,11 @@ namespace WindowsFormsApp1
                 try
                 {
                     fs = File.OpenWrite(fileName);
-                    exuptionExecuted4 = "";
+                    exeptionExecuted4 = "";
                 }
                 catch (Exception ex)
                 {
-                    exuptionExecuted4 = ex.Message.ToString();
+                    exeptionExecuted4 = ex.Message.ToString();
                     return false;
                 }
 
